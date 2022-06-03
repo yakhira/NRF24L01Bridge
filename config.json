@@ -1,0 +1,38 @@
+{
+    "name": "NRF24L01Bridge",
+    "version": "0.1",
+    "slug": "nrf24l01-bridge",
+    "description": "Bridge for NRF24 network!",
+    "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+    "startup": "before",
+    "boot": "auto",
+    "gpio": true,
+    "host_pid": true,
+    "privileged": [
+      "SYS_RAWIO"
+    ],
+    "devices": [
+      "/dev/spidev0.0:rw",
+      "/dev/mem:rw"
+    ],
+    "homeassistant_api": true,
+    "hassio_api": true,
+    "hassio_role": "default",
+    "services": ["mqtt:need"],
+    "options": {
+      "mosi_pin": 10,
+      "miso_pin": 9,
+      "sclk_pin": 11,
+      "ce_pin": 25,
+      "csn_pin": 8,
+      "mqtt_topic": ""
+    },
+    "schema": {
+      "mosi_pin": "int",
+      "miso_pin": "int",
+      "sclk_pin": "int",
+      "ce_pin": "int",
+      "csn_pin": "int",
+      "mqtt_topic": "str"
+    }
+  }
