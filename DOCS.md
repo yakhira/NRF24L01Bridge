@@ -25,11 +25,32 @@ If you have old NRF24L01Bridge settings available, remove this old integration a
 Add-on configuration:
 
 ```yaml
-"MOSI": 10,
-"MISO": 9,
-"SCLK": 11,
 "CE": 25,
-"CSN": 8
+"CSN": 8,
+"MQTT_READ_TOPIC": "nrf24/read",
+"MQTT_WRITE_TOPIC": "nrf24/write",
+"READ_PIPE": "0xe7e7e7e7e7", 
+"WRITE_PIPE": "0xc2c2c2c2c2", 
+"RADIO_CHANNEL": 118
+```
+
+MQTT_READ_TOPIC - topic to recieve message via NRF24
+
+MQTT_WRITE_TOPIC - topic to send message via NRF24
+
+RX address: 0xe7e7e7e7e7
+
+TX address: 0xc2c2c2c2c2
+
+RADIO_CHANNEL: 118 (0x76)
+
+## Example MQTT message
+
+```json
+{
+    "address": "0xc2c2c2c2c2",
+    "message": "test"
+}
 ```
 
 ## Support

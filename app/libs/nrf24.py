@@ -26,11 +26,12 @@
 
 import sys
 import time
+import logging
 
 if __name__ == '__main__':
-    print (sys.argv[0], 'is an importable module:')
-    print ("...  from", sys.argv[0], "import lib_nrf24")
-    print ("")
+    logging.info (sys.argv[0], 'is an importable module:')
+    logging.info ("...  from", sys.argv[0], "import lib_nrf24")
+    logging.info ("")
 
     exit()
 
@@ -301,35 +302,31 @@ class NRF24:
             ((status >> NRF24.RX_P_NO) & 7),
             1 if status & _BV(NRF24.TX_FULL) else 0)
 
-        print (status_str)
+        logging.info (status_str)
 
     def print_observe_tx(self, value):
-        print ("Observe Tx: %02x   Lost Pkts: %d    Retries: %d" % (value, value >> NRF24.PLOS_CNT, value & 15))
+        logging.info ("Observe Tx: %02x   Lost Pkts: %d    Retries: %d" % (value, value >> NRF24.PLOS_CNT, value & 15))
 
 
     def print_byte_register(self, name, reg, qty=1):
-        extra_tab = '\t' if len(name) < 8 else 0
-        print ("%s\t%c =" % (name, extra_tab)),
+        register = ""
         while qty > 0:
-            print ("0x%02x" % (self.read_register(reg))),
+            register += f"0x{'%02x'%self.read_register(reg)} "
             qty -= 1
             reg += 1
 
-        print ("")
+        logging.info(f"{name}: {register}")
 
     def print_address_register(self, name, reg, qty=1):
-        extra_tab = '\t' if len(name) < 8 else 0
-        print ("%s\t%c =" % (name, extra_tab)),
+        address = ""
 
         while qty > 0:
             qty -= 1
             buf = reversed(self.read_register(reg, 5))
             reg += 1
-            sys.stdout.write(" 0x"),
-            for i in buf:
-                sys.stdout.write("%02x" % i)
+            address += f"0x{''.join('%02x'%i for i in buf)} "
 
-        print ("")
+        logging.info (f"{name}: {address}")
 
 
     def setChannel(self, channel):
@@ -360,10 +357,11 @@ class NRF24:
         self.print_byte_register("DYNPD/FEATURE", NRF24.DYNPD, 2)
 
         #
-        print ("Data Rate\t = %s" % NRF24.datarate_e_str_P[self.getDataRate()])
-        print ("Model\t\t = %s" % NRF24.model_e_str_P[self.isPVariant()])
-        print ("CRC Length\t = %s" % NRF24.crclength_e_str_P[self.getCRCLength()])
-        print ("PA Power\t = %s" % NRF24.pa_dbm_e_str_P[self.getPALevel()])
+        logging.info ("Data Rate\t = %s" % NRF24.datarate_e_str_P[self.getDataRate()])
+        logging.info ("Model\t\t = %s" % NRF24.model_e_str_P[self.isPVariant()])
+        logging.info ("CRC Length\t = %s" % NRF24.crclength_e_str_P[self.getCRCLength()])
+        logging.info ("PA Power\t = %s" % NRF24.pa_dbm_e_str_P[self.getPALevel()])
+        logging.info ("SPI Speed\t = %s Mhz" %  str(self.spidev.max_speed_hz/1000000))
 
     def begin(self, csn_pin, ce_pin=0):   # csn & ce are RF24 terminology. csn = SPI's CE!
         # Initialize SPI bus..
@@ -371,6 +369,8 @@ class NRF24:
         # CE optional (at least in some circumstances, eg fixed PTX PRX roles, no powerdown)
         # CE seems to hold itself as (sufficiently) HIGH, but tie HIGH is safer!
         self.spidev.open(0, csn_pin)
+        self.spidev.max_speed_hz = 10000000
+    
         self.ce_pin = ce_pin
 
         if ce_pin:
@@ -455,14 +455,15 @@ class NRF24:
         sent_at = time.time()
 
         while True:
-            #status = self.read_register(NRF24.OBSERVE_TX, 1)
+            status = self.read_register(NRF24.OBSERVE_TX, 1)
             status = self.get_status()
             if (status & (_BV(NRF24.TX_DS) | _BV(NRF24.MAX_RT))) or (time.time() - sent_at > timeout ):
                 break
             time.sleep(10 / 1000000.0)
-        #obs = self.read_register(NRF24.OBSERVE_TX)
-        #self.print_observe_tx(obs)
-        #self.print_status(status)
+        obs = self.read_register(NRF24.OBSERVE_TX)
+        self.print_observe_tx(obs)
+        self.print_status(status)
+
         # (for debugging)
 
         what = self.whatHappened()

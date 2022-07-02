@@ -20,19 +20,21 @@
     "hassio_role": "default",
     "services": ["mqtt:need"],
     "options": {
-      "mosi_pin": 10,
-      "miso_pin": 9,
-      "sclk_pin": 11,
       "ce_pin": 25,
       "csn_pin": 8,
-      "mqtt_topic": ""
+      "mqtt_read_topic": "nrf24/read",
+      "mqtt_write_topic": "nrf24/write",
+      "read_pipe": "0xe7e7e7e7e7",
+      "write_pipe": "0xc2c2c2c2c2", 
+      "radio_channel": 118
     },
     "schema": {
-      "mosi_pin": "int",
-      "miso_pin": "int",
-      "sclk_pin": "int",
       "ce_pin": "int",
       "csn_pin": "int",
-      "mqtt_topic": "str"
+      "mqtt_read_topic": "str",
+      "mqtt_write_topic": "str",
+      "read_pipe": "str",
+      "write_pipe": "str",
+      "radio_channel": "int"
     }
   }
