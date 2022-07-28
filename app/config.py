@@ -15,7 +15,14 @@ MQTT_PASS = os.getenv('MQTT_PASSWORD')
 
 READ_PIPE = os.getenv('READ_PIPE', '0xe7e7e7e7e7').replace('0x', '')
 WRITE_PIPE = os.getenv('WRITE_PIPE', '0xc2c2c2c2c2').replace('0x', '')
-RADIO_CHANNEL = int(os.getenv('RADIO_CHANNEL', 118))
+RADIO_CHANNEL = ord(
+    bytes.fromhex(
+        os.getenv(
+            'RADIO_CHANNEL',
+            '0x76'
+        ).replace('0x', '')
+    )
+)
 
 READ_PIPE = [
     ord(bytes.fromhex(READ_PIPE[i:i+2]))

@@ -33,7 +33,7 @@ Add-on configuration:
 "MQTT_WRITE_TOPIC": "nrf24/write",
 "READ_PIPE": "0xe7e7e7e7e7", 
 "WRITE_PIPE": "0xc2c2c2c2c2", 
-"RADIO_CHANNEL": 118
+"RADIO_CHANNEL": "0x76"
 ```
 
 MQTT_READ_TOPIC - topic to recieve message via NRF24
@@ -44,7 +44,7 @@ RX address: 0xe7e7e7e7e7
 
 TX address: 0xc2c2c2c2c2
 
-RADIO_CHANNEL: 118 (0x76)
+RADIO_CHANNEL: 0x76
 
 ## Example MQTT message
 

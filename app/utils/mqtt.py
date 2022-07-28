@@ -16,7 +16,6 @@ def mqtt_subscribe(host, user, password, topic):
     return message.payload.decode()
 
 def mqtt_publish(host, user, password, topic, message):
-    logging.info(f"Publish message {message} to topic {topic}")
     publish.single(
         topic,
         message,
@@ -26,4 +25,4 @@ def mqtt_publish(host, user, password, topic, message):
             'password': password
         }
     )
-    logging.info(f"Sent message: {message} (MQTT).")
+    logging.info(f"Published message {message} to topic {topic}.")

@@ -26,7 +26,7 @@
       "mqtt_write_topic": "nrf24/write",
       "read_pipe": "0xe7e7e7e7e7",
       "write_pipe": "0xc2c2c2c2c2", 
-      "radio_channel": 118
+      "radio_channel": "0x76"
     },
     "schema": {
       "ce_pin": "int",
@@ -35,6 +35,6 @@
       "mqtt_write_topic": "str",
       "read_pipe": "str",
       "write_pipe": "str",
-      "radio_channel": "int"
+      "radio_channel": "str"
     }
   }
